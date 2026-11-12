@@ -16,3 +16,5 @@ Local: `npm install && npm run dev`.
 
 ## Sources and open items
 Every page cites its sources. Entries marked [VERIFY] need checking against the FIBA / NBA rule books. Facts were written from general knowledge and the cited pages, not yet re-checked line by line.
+
+Last deploy retry: 12 Nov 2026 (previous asset upload failed).
