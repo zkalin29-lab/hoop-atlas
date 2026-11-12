@@ -1,14 +1,33 @@
 ---
-import { Picture, getImage } from 'astro:assets';
+import { getImage } from 'astro:assets';
 import type { Photo } from '../lib/photos';
 interface Props { photo: Photo; sizes?: string; eager?: boolean; fill?: boolean }
 const { photo, sizes = '100vw', eager = false, fill = false } = Astro.props;
-// Tiny blurred WebP shown behind the picture until the real one loads.
-const tiny = await getImage({ src: photo.src, width: 24, format: 'webp', quality: 30 });
-const ratio = `${photo.src.width} / ${photo.src.height}`;
+const W = photo.src.width, H = photo.src.height;
+// Widths never exceed the original, so small files are not upscaled.
+const ws = [...new Set([480, 960, 1600].map((w) => Math.min(w, W)))];
+// One format at a time, each guarded: a failure drops that format instead of breaking the build.
+const srcset = async (format: 'avif' | 'webp') => {
+  try {
+    const imgs = await Promise.all(ws.map((w) => getImage({ src: photo.src, width: w, format })));
+    return { set: imgs.map((i, k) => `${i.src} ${ws[k]}w`).join(', '), last: imgs[imgs.length - 1].src };
+  } catch (e) {
+    console.warn(`[photos] ${photo.file}: ${format} skipped (${(e as Error).message})`);
+    return { set: '', last: '' };
+  }
+};
+const avif = await srcset('avif');
+const webp = await srcset('webp');
+let tiny = '';
+try { tiny = (await getImage({ src: photo.src, width: 24, format: 'webp', quality: 30 })).src; } catch { /* placeholder is optional */ }
+const w = ws[ws.length - 1];
 ---
-<figure class:list={['ph', { fill }]} style={`background-image:url(${tiny.src});${fill ? '' : `aspect-ratio:${ratio}`}`}>
-  <Picture src={photo.src} formats={['avif', 'webp']} widths={[480, 960, 1600]} sizes={sizes}
-    alt={photo.caption} loading={eager ? 'eager' : 'lazy'} decoding="async" />
+<figure class:list={['ph', { fill }]} style={`${tiny ? `background-image:url(${tiny});` : ''}${fill ? '' : `aspect-ratio:${W} / ${H}`}`}>
+  <picture>
+    {avif.set && <source type="image/avif" srcset={avif.set} sizes={sizes} />}
+    {webp.set && <source type="image/webp" srcset={webp.set} sizes={sizes} />}
+    <img src={webp.last || photo.src.src} width={w} height={Math.round((w * H) / W)} alt={photo.caption}
+      loading={eager ? 'eager' : 'lazy'} decoding="async" />
+  </picture>
   {photo.caption && <figcaption class="mono">{photo.caption}</figcaption>}
 </figure>
