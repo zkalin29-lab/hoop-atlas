@@ -8,7 +8,7 @@ Independent, unofficial basketball reference in the Atlas family (Jū Atlas, Ape
 3. Optional caption after a double underscore (use _ for spaces): `court-01__Hardwood_at_dusk.jpg`.
 4. The build makes AVIF/WebP at 480/960/1600 px with width/height, lazy-loads below the fold and shows a blurred placeholder while loading.
 5. An empty slot shows a court-line placeholder. An empty folder never fails the build.
-6. The build log warns about any original over about 8 MB.
+6. A photo the build cannot decode is set aside with a warning (re-export it as JPG), never a failed build. The build log also warns about any original over about 8 MB.
 
 ## Deploy
 Cloudflare Workers Builds: build command `npm run build`, deploy command `npx wrangler deploy` (serves `dist/`, see `wrangler.jsonc`).

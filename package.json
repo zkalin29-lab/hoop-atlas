@@ -2,6 +2,6 @@
   "name": "hoop-atlas",
   "type": "module",
   "private": true,
-  "scripts": { "dev": "astro dev", "build": "astro build", "preview": "astro preview" },
+  "scripts": { "dev": "astro dev", "build": "node scripts/check-photos.mjs && astro build", "preview": "astro preview" },
   "dependencies": { "astro": "^5.0.0", "sharp": "^0.33.5" }
 }
