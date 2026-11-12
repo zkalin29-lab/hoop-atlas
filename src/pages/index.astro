@@ -16,7 +16,7 @@ const tiles = [
 ---
 <Base title="Hoop Atlas" desc="An independent reference to basketball: the court, the rules, the positions and the eras.">
   <section class="hero">
-    {heroes.length > 0 && <div class="hero-photos">{heroes.map((p) => <div class="hero-slide"><Photo photo={p} fill eager sizes="100vw" /></div>)}</div>}
+    {heroes.length > 0 && <div class="hero-photos">{heroes.map((p) => <div class:list={["hero-slide", { portrait: p.src.height > p.src.width }]}><Photo photo={p} fill eager sizes="100vw" /></div>)}</div>}
     <div class="hero-court"><Court /></div>
     <div class="hero-text reveal">
       <p class="mono">An independent reference to basketball</p>

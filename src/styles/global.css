@@ -69,3 +69,5 @@ table{border-collapse:collapse;width:100%}th,td{text-align:left;padding:10px 12p
 @media(max-width:900px){.tiles{grid-template-columns:repeat(2,1fr)}.two,.entries{grid-template-columns:1fr}}
 @media(max-width:600px){.tiles{grid-template-columns:1fr}.wrap,.top,.strip{padding-inline:18px}.hero{padding-inline:18px}.hero-court svg{width:130%;margin-right:-30%;opacity:.35}.tl-dot span{display:none}.tl-dot[aria-current=true] span{display:block}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}.ball{animation:none;offset-distance:100%}.js .reveal{opacity:1;transform:none;transition:none}.draw .ln path,.draw .ln circle{animation:none!important;stroke-dashoffset:0}.hero-slide{transition:none}.tl-cur{transition:none}}
+/* portrait photos sit on the right of the hero instead of being stretched across it */
+@media(min-width:700px){.hero-slide.portrait{left:auto;right:5%;width:min(42%,520px)}.hero-slide.portrait .ph{border-radius:6px}}
