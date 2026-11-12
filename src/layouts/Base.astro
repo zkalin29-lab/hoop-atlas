@@ -17,6 +17,7 @@ const nav = [['/court/', 'Court'], ['/rules/', 'Rules'], ['/positions/', 'Positi
   <script is:inline>document.documentElement.classList.add('js')</script>
 </head>
 <body>
+  <div class="progress" aria-hidden="true"></div>
   <div class="bar mono">Draft · test page · not indexed</div>
   <a class="skip mono" href="#main">Skip to content</a>
   <header class="top">
@@ -36,6 +37,23 @@ const nav = [['/court/', 'Court'], ['/rules/', 'Rules'], ['/positions/', 'Positi
     document.querySelectorAll('.reveal, .draw').forEach((e, i) => {
       (e as HTMLElement).style.setProperty('--i', String(i % 4));
       R ? e.classList.add('in') : io.observe(e);
+    });
+    // Scroll progress line and count-up numbers.
+    const pbar = document.querySelector<HTMLElement>('.progress')!;
+    const prog = () => { const h = document.documentElement.scrollHeight - innerHeight; pbar.style.transform = `scaleX(${h > 0 ? scrollY / h : 0})`; };
+    addEventListener('scroll', prog, { passive: true }); prog();
+    document.querySelectorAll<HTMLElement>('.num').forEach((el) => {
+      const to = Number(el.dataset.to);
+      if (R) return;
+      el.textContent = '0';
+      const o = new IntersectionObserver((es) => {
+        if (!es[0].isIntersecting) return;
+        o.disconnect();
+        const t0 = performance.now();
+        const f = (t: number) => { const p = Math.min(1, (t - t0) / 900); el.textContent = String(Math.round(to * (1 - Math.pow(1 - p, 3)))); if (p < 1) requestAnimationFrame(f); };
+        requestAnimationFrame(f);
+      });
+      o.observe(el);
     });
     // Hero photos: start on a random one, crossfade every 7 s, drift gently with scroll.
     const slides = [...document.querySelectorAll('.hero-slide')];

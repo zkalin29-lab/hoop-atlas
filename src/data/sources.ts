@@ -9,6 +9,7 @@ export const S = {
   clock: { t: 'Wikipedia: Shot clock', u: 'https://en.wikipedia.org/wiki/Shot_clock' },
   three: { t: 'Wikipedia: Three-point field goal', u: 'https://en.wikipedia.org/wiki/Three-point_field_goal' },
   pos: { t: 'Wikipedia: Basketball positions', u: 'https://en.wikipedia.org/wiki/Basketball_positions' },
+  primer: { t: 'Basketball basics primer (text supplied by the site owner; source page to be added)', u: '' },
   bbref: { t: 'Basketball-Reference: Glossary', u: 'https://www.basketball-reference.com/about/glossary.html' },
   hist: { t: 'Wikipedia: History of basketball', u: 'https://en.wikipedia.org/wiki/History_of_basketball' },
   naismith: { t: 'Wikipedia: James Naismith', u: 'https://en.wikipedia.org/wiki/James_Naismith' },

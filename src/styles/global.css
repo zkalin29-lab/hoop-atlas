@@ -71,3 +71,26 @@ table{border-collapse:collapse;width:100%}th,td{text-align:left;padding:10px 12p
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}.ball{animation:none;offset-distance:100%}.js .reveal{opacity:1;transform:none;transition:none}.draw .ln path,.draw .ln circle{animation:none!important;stroke-dashoffset:0}.hero-slide{transition:none}.tl-cur{transition:none}}
 /* portrait photos sit on the right of the hero instead of being stretched across it */
 @media(min-width:700px){.hero-slide.portrait{left:auto;right:5%;width:min(42%,520px)}.hero-slide.portrait .ph{border-radius:6px}}
+/* progress, stats, quick cards */
+.progress{position:fixed;top:0;left:0;right:0;height:3px;background:var(--acc);transform:scaleX(0);transform-origin:left;z-index:20}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;list-style:none;margin:0;padding:0;border:1px solid var(--rule);border-radius:6px;background:linear-gradient(180deg,#0b0f15,#141a24)}
+.stats li{padding:22px 20px;border-right:1px solid var(--rule);display:flex;flex-direction:column;gap:4px}.stats li:last-child{border:0}
+.stats b{font:500 clamp(44px,6vw,76px)/1 'IBM Plex Mono',monospace;color:var(--acc);text-shadow:0 0 18px rgba(255,176,32,.35)}
+.quick{list-style:none;padding:0;margin:12px 0 0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;counter-reset:q}
+.quick li{border-top:2px solid var(--acc);padding:14px 4px 6px}.quick p{margin:6px 0 0;color:var(--dim)}.quick span{color:var(--acc)}
+/* scoring ladder, clock bars, flow */
+.ladder{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:end}
+.rung{border:1px solid var(--rule);border-radius:6px;padding:18px;background:var(--card);position:relative;overflow:hidden}
+.rung:nth-child(1){min-height:200px}.rung:nth-child(2){min-height:250px}.rung:nth-child(3){min-height:300px}
+.rung .big{position:absolute;right:12px;bottom:-14px;font:500 150px/1 'Newsreader',serif;color:var(--acc);opacity:.22}.rung p{color:var(--dim);margin:6px 0 0;max-width:15rem}
+.clock{display:grid;gap:10px;margin:12px 0}.crow{display:grid;grid-template-columns:9rem 1fr 11rem;gap:14px;align-items:center}
+.track{display:block;height:18px;background:var(--card);border-radius:3px;overflow:hidden}.fill{display:block;height:100%;width:calc(var(--m) / 48 * 100%);background:repeating-linear-gradient(90deg,var(--wood1) 0 24px,var(--wood2) 24px 48px);border-right:3px solid var(--acc)}
+.js .fill{transform:scaleX(0);transform-origin:left;transition:transform 1.2s cubic-bezier(.3,.8,.2,1)}.js .clock.in .fill{transform:none}.crow em{color:var(--dim);font-style:normal}
+.flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:30px;counter-reset:s}
+.step{border:1px solid var(--rule);border-radius:6px;padding:18px;background:var(--card);position:relative}.step span{color:var(--acc)}.step p{margin:6px 0 0;color:var(--dim)}
+.step:not(:last-child)::after{content:"";position:absolute;right:-24px;top:50%;width:18px;height:18px;border-top:3px solid var(--acc);border-right:3px solid var(--acc);transform:translateY(-50%) rotate(45deg)}
+.chips{display:flex;flex-wrap:wrap;gap:10px;list-style:none;padding:0;margin:14px 0}
+.chips li{border:1px solid var(--rule);border-radius:99px;padding:8px 18px;font-size:20px;background:var(--card);transition:background .2s,color .2s,transform .2s}.chips li:hover{background:var(--acc);color:#10151d;transform:translateY(-3px) rotate(-2deg)}
+@media(max-width:900px){.stats,.quick{grid-template-columns:repeat(2,minmax(0,1fr))}.stats li:nth-child(2){border-right:0}.stats li:nth-child(-n+2){border-bottom:1px solid var(--rule)}.crow{grid-template-columns:7rem 1fr}.crow>span:last-child{grid-column:1/-1}}
+@media(max-width:600px){.quick,.ladder,.flow{grid-template-columns:1fr}.rung{min-height:0!important}.step:not(:last-child)::after{right:auto;left:50%;top:auto;bottom:-22px;transform:translateX(-50%) rotate(135deg)}.flow{gap:34px}}
+@media(prefers-reduced-motion:reduce){.js .fill{transform:none;transition:none}.chips li{transition:none}.progress{transition:none}}

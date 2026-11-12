@@ -4,18 +4,65 @@ import PageHead from '../components/PageHead.astro';
 import PagePhotos from '../components/PagePhotos.astro';
 import Sources from '../components/Sources.astro';
 import { rules } from '../data/rules';
+import { S } from '../data/sources';
+const points = [
+  ['1', 'Free throw', 'An unguarded shot from the line, awarded after certain fouls.'],
+  ['2', 'Field goal', 'Any basket scored from inside the three-point arc.'],
+  ['3', 'Three-pointer', 'A basket scored from beyond the arc.'],
+];
+const clock = [['NBA', 48, '4 × 12 min'], ['FIBA', 40, '4 × 10 min'], ['US college (men)', 40, '2 × 20 min'], ['US high school', 32, '4 × 8 min']];
+const after = [
+  ['Shooting foul', 'The shooter gets two free throws, or three if he was beyond the arc.'],
+  ['Shot goes in anyway', 'The basket counts and he adds one free throw: a possible four-point play.'],
+  ['Foul away from a shot', 'A throw-in from the side or baseline, until the team has built up enough fouls. Then the bonus gives free throws.'],
+];
 ---
-<Base title="Rules and violations" desc="Short entries on common violations and fouls, each with what the referee signals.">
-  <PageHead kicker="02 · Rules and violations" title="Hear the whistle." lede="Twelve calls you will see in any game: what happened, and what the referee does with their hands." />
+<Base title="Rules and violations" desc="Scoring, the clock, and short entries on violations and fouls, each with what the referee signals.">
+  <PageHead kicker="02 · Rules and violations" title="Hear the whistle." lede="How points and time work, then the calls you will see in any game, and what the referee does with their hands." />
   <PagePhotos of="rules" />
+
   <section class="wrap">
+    <h2 class="reveal">Three ways to score</h2>
+    <div class="ladder">
+      {points.map(([n, t, d], i) => <div class="rung reveal" style={`--i:${i}`}><b class="big">{n}</b><h3>{t}</h3><p>{d}</p></div>)}
+    </div>
+    <Sources list={[S.three, S.fiba, S.nba, S.primer]} />
+  </section>
+
+  <section class="wrap">
+    <h2 class="reveal">How long a game lasts</h2>
+    <div class="clock reveal" role="list">
+      {clock.map(([l, m, d]) => <div class="crow" role="listitem"><span class="mono">{l}</span><i class="track"><i class="fill" style={`--m:${m}`}></i></i><span>{m} min <em>({d})</em></span></div>)}
+    </div>
+    <p class="note">Tied after regulation? Overtime periods are played until someone wins. Women's college basketball in the United States now uses quarters [VERIFY]. Period lengths vary by league.</p>
+    <Sources list={[S.fiba, S.nba, S.primer]} />
+  </section>
+
+  <section class="wrap">
+    <h2 class="reveal">After a foul</h2>
+    <div class="flow">
+      {after.map(([t, d], i) => <div class="step reveal" style={`--i:${i}`}><span class="mono">{i + 1}</span><h3>{t}</h3><p>{d}</p></div>)}
+    </div>
+    <p class="note">The number of team fouls that triggers the bonus depends on the level. The primer's youth format uses seven (one-and-one) and ten (two shots); the NBA bonus starts at the fifth team foul in a quarter [VERIFY].</p>
+    <Sources list={[S.primer, S.fiba, S.nba]} />
+  </section>
+
+  <section class="wrap">
+    <h2 class="reveal">Calls and signals</h2>
+    <div class="tog" role="group" aria-label="Filter calls">
+      <button type="button" data-f="all" aria-pressed="true">All</button>
+      <button type="button" data-f="Violation" aria-pressed="false">Violations</button>
+      <button type="button" data-f="Foul" aria-pressed="false">Fouls</button>
+    </div>
+    <p class="mono out" id="f-out" aria-live="polite">Showing {rules.length} of {rules.length}</p>
     <ul class="entries">
       {rules.map((r) => (
-        <li class="entry reveal">
+        <li class="entry reveal" data-kind={r.kind}>
           <span class="mono badge">{r.kind}</span>
           <h3>{r.name}</h3>
           <p>{r.what}</p>
-          <p class="signal"><b>Referee signals</b>{r.signal}{r.verify && <span class="note"> [VERIFY]</span>}</p>
+          <p class="signal"><b>Referee signals</b>{r.signal ?? <span class="note">To be confirmed against the rule book.</span>}{r.verify && <span class="note"> [VERIFY]</span>}</p>
+          {r.note && <p class="note">{r.note}</p>}
           <Sources list={r.src} />
         </li>
       ))}
@@ -23,3 +70,14 @@ import { rules } from '../data/rules';
     <p class="note">Signals are paraphrased from FIBA's chart of referee signals. The NBA uses the same gestures in most cases and differs in a few. Items marked [VERIFY] still need checking against the rule book.</p>
   </section>
 </Base>
+<script>
+  const tabs = [...document.querySelectorAll<HTMLButtonElement>('[data-f]')];
+  const items = [...document.querySelectorAll<HTMLElement>('.entry[data-kind]')];
+  const out = document.getElementById('f-out')!;
+  tabs.forEach((t) => t.addEventListener('click', () => {
+    tabs.forEach((x) => x.setAttribute('aria-pressed', String(x === t)));
+    const f = t.dataset.f!;
+    items.forEach((i) => (i.hidden = f !== 'all' && i.dataset.kind !== f));
+    out.textContent = `Showing ${items.filter((i) => !i.hidden).length} of ${items.length}`;
+  }));
+</script>

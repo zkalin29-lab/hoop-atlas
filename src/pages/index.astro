@@ -7,6 +7,14 @@ import Arc from '../components/Arc.astro';
 import { photosFor } from '../lib/photos';
 const heroes = photosFor('hero');
 const gallery = photosFor('gallery');
+const stats = [[5, 'players a side'], [10, 'feet to the rim'], [3, 'point values: 1, 2, 3'], [48, 'minutes in an NBA game']];
+const quick = [
+  ['Two teams', 'Five players a side try to put the ball through a hoop ten feet up. The ball moves by passing or dribbling; the team with it is on offence, the other on defence.'],
+  ['Points', 'A basket is worth two, three from beyond the arc, and a free throw one.'],
+  ['The clock', 'Time is split into halves or quarters depending on the level, with overtime if it is tied.'],
+  ['The tip-off', 'A referee tosses the ball up between two players at centre court. Each team defends one basket, and they swap at halftime.'],
+  ['Fouls & violations', 'Illegal contact is a foul; breaking the rules of ball handling or timing is a violation. Either way the other team usually gets the ball.'],
+];
 const tiles = [
   ['/court/', '01', 'The court', 'Lines, zones and dimensions. NBA against FIBA.'],
   ['/rules/', '02', 'Rules & violations', 'What the referee signals, in one line.'],
@@ -27,9 +35,21 @@ const tiles = [
   </section>
   <div class="floor"></div>
   <section class="wrap">
+    <ul class="stats" aria-label="The game in numbers">
+      {stats.map(([n, l], i) => <li class="reveal" style={`--i:${i}`}><b class="num" data-to={n}>{n}</b><span class="mono">{l}</span></li>)}
+    </ul>
+  </section>
+  <section class="wrap">
     <div class="tiles">
       {tiles.map(([h, n, t, d]) => <a class="tile reveal" href={h}><span class="mono">{n}</span><h3>{t}</h3><p>{d}</p></a>)}
     </div>
+  </section>
+  <section class="wrap">
+    <p class="mono">The game in sixty seconds</p>
+    <ol class="quick">
+      {quick.map(([t, d], i) => <li class="reveal" style={`--i:${i % 3}`}><span class="mono">{String(i + 1).padStart(2, '0')}</span><h3>{t}</h3><p>{d}</p></li>)}
+    </ol>
+    <p class="src mono">Sources: <a href="https://www.fiba.basketball/en/documents/official-basketball-rules" rel="noopener">FIBA Official Basketball Rules</a> · <a href="https://official.nba.com/rulebook/" rel="noopener">NBA Official Rules</a> · Basketball basics primer (supplied by the site owner; source page to be added)</p>
   </section>
   <section class="wrap">
     <p class="mono">Gallery</p>
