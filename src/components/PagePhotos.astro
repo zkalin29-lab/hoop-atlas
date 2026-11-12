@@ -2,9 +2,9 @@
 import Photo from './Photo.astro';
 import Placeholder from './Placeholder.astro';
 import { photosFor } from '../lib/photos';
-const { slot } = Astro.props;
-const ps = photosFor(slot);
+const { of } = Astro.props;
+const ps = photosFor(of);
 ---
 <div class="strip reveal">
-  {ps.length ? ps.map((p) => <Photo photo={p} sizes="(min-width:900px) 33vw, 100vw" />) : <Placeholder hint={`${slot}-01.jpg`} />}
+  {ps.length ? ps.map((p) => <Photo photo={p} sizes="(min-width:900px) 33vw, 100vw" />) : <Placeholder hint={`${of}-01.jpg`} />}
 </div>
