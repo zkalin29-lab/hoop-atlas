@@ -1,0 +1,61 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import PagePhotos from '../components/PagePhotos.astro';
+import Sources from '../components/Sources.astro';
+import { eras } from '../data/eras';
+const MIN = 1891, MAX = 2026;
+---
+<Base title="Eras" desc="A timeline of basketball from 1891 to today.">
+  <PageHead kicker="04 · Eras" title="1891 to today." lede="Nine eras, from a gym in Massachusetts to a game without fixed positions. Move your pointer along the rail, or use the arrow keys." />
+  <PagePhotos slot="eras" />
+  <section class="wrap">
+    <div class="tl" id="tl" role="group" aria-label="Timeline, 1891 to today">
+      <div class="tl-rail"></div>
+      {eras.map((e, i) => (
+        <button type="button" class="tl-dot" data-i={i} style={`left:${(((e.from - MIN) / (MAX - MIN)) * 100).toFixed(2)}%`} aria-label={`${e.from}: ${e.title}`} aria-current={i === eras.length - 1 ? 'true' : 'false'}><span class="mono">{e.from}</span></button>
+      ))}
+      <div class="tl-cur" aria-hidden="true"></div>
+    </div>
+    <p class="out mono" id="tl-out" aria-live="polite"></p>
+    <ol class="eras">
+      {eras.map((e) => (
+        <li class="era" data-from={e.from}>
+          <p class="mono yrs">{e.from}–{e.to}</p>
+          <h3>{e.title}</h3>
+          <p>{e.text}</p>
+          <Sources list={e.src} />
+        </li>
+      ))}
+    </ol>
+  </section>
+</Base>
+<script>
+  const tl = document.getElementById('tl');
+  if (tl) {
+    const MIN = 1891, MAX = 2026;
+    const eras = [...document.querySelectorAll<HTMLElement>('.era')];
+    const dots = [...tl.querySelectorAll<HTMLElement>('.tl-dot')];
+    const cur = tl.querySelector<HTMLElement>('.tl-cur')!, out = document.getElementById('tl-out')!;
+    const from = eras.map((e) => Number(e.dataset.from));
+    const set = (i: number, pct?: number) => {
+      eras.forEach((e, k) => (e.hidden = k !== i));
+      dots.forEach((d, k) => d.setAttribute('aria-current', String(k === i)));
+      cur.style.left = (pct ?? ((from[i] - MIN) / (MAX - MIN)) * 100) + '%';
+      out.textContent = `${from[i]} · ${eras[i].querySelector('h3')!.textContent}`;
+    };
+    const at = (x: number) => {
+      const r = tl.getBoundingClientRect(), p = Math.max(0, Math.min(1, (x - r.left) / r.width)), y = MIN + p * (MAX - MIN);
+      let i = 0; from.forEach((f, k) => { if (f <= y) i = k; });
+      set(i, p * 100);
+    };
+    tl.addEventListener('pointermove', (e) => at(e.clientX));
+    tl.addEventListener('pointerdown', (e) => at(e.clientX));
+    dots.forEach((d, k) => {
+      d.addEventListener('focus', () => set(k));
+      d.addEventListener('click', () => set(k));
+      d.addEventListener('keydown', (e) => { const n = dots[k + (e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0)]; if (n && n !== d) n.focus(); });
+    });
+    set(eras.length - 1);
+  }
+</script>

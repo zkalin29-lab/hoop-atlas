@@ -1,0 +1,14 @@
+---
+import { Picture, getImage } from 'astro:assets';
+import type { Photo } from '../lib/photos';
+interface Props { photo: Photo; sizes?: string; eager?: boolean; fill?: boolean }
+const { photo, sizes = '100vw', eager = false, fill = false } = Astro.props;
+// Tiny blurred WebP shown behind the picture until the real one loads.
+const tiny = await getImage({ src: photo.src, width: 24, format: 'webp', quality: 30 });
+const ratio = `${photo.src.width} / ${photo.src.height}`;
+---
+<figure class:list={['ph', { fill }]} style={`background-image:url(${tiny.src});${fill ? '' : `aspect-ratio:${ratio}`}`}>
+  <Picture src={photo.src} formats={['avif', 'webp']} widths={[480, 960, 1600]} sizes={sizes}
+    alt={photo.caption} loading={eager ? 'eager' : 'lazy'} decoding="async" />
+  {photo.caption && <figcaption class="mono">{photo.caption}</figcaption>}
+</figure>

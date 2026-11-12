@@ -1,0 +1,51 @@
+---
+import '../styles/global.css';
+const { title, desc = 'Hoop Atlas, an independent reference to basketball. Draft.' } = Astro.props;
+const path = Astro.url.pathname;
+const nav = [['/court/', 'Court'], ['/rules/', 'Rules'], ['/positions/', 'Positions'], ['/eras/', 'Eras']];
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>{title === 'Hoop Atlas' ? title : `${title} — Hoop Atlas`}</title>
+  <meta name="description" content={desc} />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script is:inline>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+  <div class="bar mono">Draft · test page · not indexed</div>
+  <a class="skip mono" href="#main">Skip to content</a>
+  <header class="top">
+    <a class="brand" href="/" aria-label="Hoop Atlas home">
+      <svg width="36" height="36" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="5" fill="#ffb020"/><path d="M6 30C12 6 28 6 34 30" fill="none" stroke="#10151d" stroke-width="3"/><circle cx="20" cy="10" r="3" fill="#10151d"/></svg>
+      <span>Hoop Atlas</span>
+    </a>
+    <nav class="mono" aria-label="Sections">
+      {nav.map(([h, l]) => <a href={h} aria-current={path === h ? 'page' : undefined}>{l}</a>)}
+    </nav>
+  </header>
+  <main id="main"><slot /></main>
+  <footer class="wrap mono">Hoop Atlas · independent, unofficial, draft · text paraphrased from the sources cited on each page</footer>
+  <script>
+    const R = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: 0.15 });
+    document.querySelectorAll('.reveal, .draw').forEach((e, i) => {
+      (e as HTMLElement).style.setProperty('--i', String(i % 4));
+      R ? e.classList.add('in') : io.observe(e);
+    });
+    // Hero photos: start on a random one, crossfade every 7 s, drift gently with scroll.
+    const slides = [...document.querySelectorAll('.hero-slide')];
+    if (slides.length) {
+      let i = Math.floor(Math.random() * slides.length);
+      slides[i].classList.add('on');
+      if (slides.length > 1 && !R) setInterval(() => { slides[i].classList.remove('on'); i = (i + 1) % slides.length; slides[i].classList.add('on'); }, 7000);
+    }
+    const hero = document.querySelector<HTMLElement>('.hero');
+    if (hero && !R) addEventListener('scroll', () => hero.style.setProperty('--sy', Math.min(scrollY, 700) * 0.12 + 'px'), { passive: true });
+  </script>
+</body>
+</html>

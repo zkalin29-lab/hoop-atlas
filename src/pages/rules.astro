@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import PagePhotos from '../components/PagePhotos.astro';
+import Sources from '../components/Sources.astro';
+import { rules } from '../data/rules';
+---
+<Base title="Rules and violations" desc="Short entries on common violations and fouls, each with what the referee signals.">
+  <PageHead kicker="02 · Rules and violations" title="Hear the whistle." lede="Twelve calls you will see in any game: what happened, and what the referee does with their hands." />
+  <PagePhotos slot="rules" />
+  <section class="wrap">
+    <ul class="entries">
+      {rules.map((r) => (
+        <li class="entry reveal">
+          <span class="mono badge">{r.kind}</span>
+          <h3>{r.name}</h3>
+          <p>{r.what}</p>
+          <p class="signal"><b>Referee signals</b>{r.signal}{r.verify && <span class="note"> [VERIFY]</span>}</p>
+          <Sources list={r.src} />
+        </li>
+      ))}
+    </ul>
+    <p class="note">Signals are paraphrased from FIBA's chart of referee signals. The NBA uses the same gestures in most cases and differs in a few. Items marked [VERIFY] still need checking against the rule book.</p>
+  </section>
+</Base>

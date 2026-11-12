@@ -1,0 +1,40 @@
+---
+import Base from '../layouts/Base.astro';
+import Photo from '../components/Photo.astro';
+import Placeholder from '../components/Placeholder.astro';
+import Court from '../components/Court.astro';
+import Arc from '../components/Arc.astro';
+import { photosFor } from '../lib/photos';
+const heroes = photosFor('hero');
+const gallery = photosFor('gallery');
+const tiles = [
+  ['/court/', '01', 'The court', 'Lines, zones and dimensions. NBA against FIBA.'],
+  ['/rules/', '02', 'Rules & violations', 'What the referee signals, in one line.'],
+  ['/positions/', '03', 'Positions & roles', 'Five positions and the names used today.'],
+  ['/eras/', '04', 'Eras', '1891 to today. Scrub the timeline.'],
+];
+---
+<Base title="Hoop Atlas" desc="An independent reference to basketball: the court, the rules, the positions and the eras.">
+  <section class="hero">
+    {heroes.length > 0 && <div class="hero-photos">{heroes.map((p) => <div class="hero-slide"><Photo photo={p} fill eager sizes="100vw" /></div>)}</div>}
+    <div class="hero-court"><Court /></div>
+    <div class="hero-text reveal">
+      <p class="mono">An independent reference to basketball</p>
+      <h1>Ten feet <em>up.</em></h1>
+      <p class="lede">Every line on the floor, every whistle, every era. Plain English, with sources, lit like a late game.</p>
+      <Arc />
+    </div>
+  </section>
+  <div class="floor"></div>
+  <section class="wrap">
+    <div class="tiles">
+      {tiles.map(([h, n, t, d]) => <a class="tile reveal" href={h}><span class="mono">{n}</span><h3>{t}</h3><p>{d}</p></a>)}
+    </div>
+  </section>
+  <section class="wrap">
+    <p class="mono">Gallery</p>
+    <div class="gallery reveal">
+      {gallery.length ? gallery.map((p) => <Photo photo={p} sizes="360px" />) : <Placeholder hint="any other filename lands here" />}
+    </div>
+  </section>
+</Base>

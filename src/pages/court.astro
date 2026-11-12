@@ -1,0 +1,63 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import PagePhotos from '../components/PagePhotos.astro';
+import Court from '../components/Court.astro';
+import Sources from '../components/Sources.astro';
+import { S } from '../data/sources';
+const rows = [
+  ['Court (full)', '94 × 50 ft', '28 × 15 m'],
+  ['Rim height', '10 ft (3.05 m)', '3.05 m'],
+  ['Lane width', '16 ft', '4.9 m'],
+  ['Free-throw line', '19 ft from the baseline', '5.8 m from the baseline'],
+  ['Free-throw circle radius', '6 ft', '1.80 m'],
+  ['Three-point line', '23 ft 9 in top, 22 ft corners', '6.75 m top, 6.60 m corners'],
+  ['Restricted area radius', '4 ft', '1.25 m'],
+];
+---
+<Base title="The court" desc="An interactive half-court diagram with NBA and FIBA dimensions.">
+  <PageHead kicker="01 · The court" title="Hover a line." lede="Half a court, drawn to scale. Switch between the NBA and FIBA rule books and watch the lines move." />
+  <PagePhotos slot="court" />
+  <section class="wrap two">
+    <div><Court interactive /></div>
+    <div>
+      <div class="tog" role="group" aria-label="Rule set">
+        <button type="button" data-m="nba" aria-pressed="true">NBA</button>
+        <button type="button" data-m="fiba" aria-pressed="false">FIBA</button>
+      </div>
+      <div id="out" class="readout" aria-live="polite">Hover, tap or focus a zone to read its dimensions.</div>
+      <p class="note">The drawing uses one common 50 ft width for both codes. The real FIBA court is 15 m wide. Distances are measured from the centre of the basket.</p>
+    </div>
+  </section>
+  <section class="wrap reveal">
+    <h2>NBA and FIBA side by side</h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th></th><th>NBA</th><th>FIBA</th></tr></thead>
+      <tbody>{rows.map(([a, b, c]) => <tr><th scope="row">{a}</th><td>{b}</td><td>{c}</td></tr>)}</tbody>
+    </table></div>
+    <Sources list={[S.court, S.fiba, S.nba, S.three]} />
+  </section>
+</Base>
+<script>
+  import { SPEC, geometry, READ } from '../lib/court';
+  const svg = document.getElementById('court');
+  if (svg) {
+    let mode: 'nba' | 'fiba' = 'nba', key = '';
+    const out = document.getElementById('out')!;
+    const zones = [...svg.querySelectorAll<SVGPathElement>('.z')];
+    const show = (k: string) => {
+      key = k; const r = READ[k];
+      out.textContent = `${r[0]} (${mode.toUpperCase()}): ${r[mode === 'nba' ? 1 : 2]}`;
+      zones.forEach((z) => z.classList.toggle('on', z.dataset.k === k));
+    };
+    zones.forEach((z) => ['pointerenter', 'focus', 'click'].forEach((ev) => z.addEventListener(ev, () => show(z.dataset.k!))));
+    document.querySelectorAll<HTMLButtonElement>('[data-m]').forEach((b) => b.addEventListener('click', () => {
+      mode = b.dataset.m as 'nba' | 'fiba';
+      document.querySelectorAll('[data-m]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      const g = geometry(SPEC[mode]);
+      svg.querySelectorAll<SVGPathElement>('[data-g]').forEach((p) => p.setAttribute('d', g[p.dataset.g!] + (p.dataset.z ? 'Z' : '')));
+      svg.classList.remove('in'); void svg.getBoundingClientRect(); svg.classList.add('in'); // redraw the lines
+      if (key) show(key);
+    }));
+  }
+</script>

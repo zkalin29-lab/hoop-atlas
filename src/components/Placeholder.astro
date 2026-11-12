@@ -1,0 +1,12 @@
+---
+const { hint = '' } = Astro.props;
+---
+<div class="slot" role="img" aria-label="No photo here yet">
+  <svg viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <g fill="none" stroke="currentColor" stroke-width="1.5">
+      <rect x="8" y="8" width="284" height="184"/><path d="M150 8V192"/><circle cx="150" cy="100" r="28"/>
+      <path d="M8 62H58V138H8M292 62H242V138H292"/><path d="M8 40A92 92 0 0 1 8 160M292 40A92 92 0 0 0 292 160"/>
+    </g>
+  </svg>
+  {hint && <span class="mono">{hint}</span>}
+</div>

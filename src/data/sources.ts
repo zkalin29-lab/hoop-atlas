@@ -1,0 +1,21 @@
+export type Src = { t: string; u: string };
+export const S = {
+  court: { t: 'Wikipedia: Basketball court', u: 'https://en.wikipedia.org/wiki/Basketball_court' },
+  fiba: { t: 'FIBA Official Basketball Rules', u: 'https://www.fiba.basketball/en/documents/official-basketball-rules' },
+  nba: { t: 'NBA Official Rules', u: 'https://official.nba.com/rulebook/' },
+  viol: { t: 'Wikipedia: Violation (basketball)', u: 'https://en.wikipedia.org/wiki/Violation_(basketball)' },
+  travel: { t: 'Wikipedia: Traveling (basketball)', u: 'https://en.wikipedia.org/wiki/Traveling_(basketball)' },
+  dribble: { t: 'Wikipedia: Dribbling', u: 'https://en.wikipedia.org/wiki/Dribbling' },
+  clock: { t: 'Wikipedia: Shot clock', u: 'https://en.wikipedia.org/wiki/Shot_clock' },
+  three: { t: 'Wikipedia: Three-point field goal', u: 'https://en.wikipedia.org/wiki/Three-point_field_goal' },
+  pos: { t: 'Wikipedia: Basketball positions', u: 'https://en.wikipedia.org/wiki/Basketball_positions' },
+  bbref: { t: 'Basketball-Reference: Glossary', u: 'https://www.basketball-reference.com/about/glossary.html' },
+  hist: { t: 'Wikipedia: History of basketball', u: 'https://en.wikipedia.org/wiki/History_of_basketball' },
+  naismith: { t: 'Wikipedia: James Naismith', u: 'https://en.wikipedia.org/wiki/James_Naismith' },
+  nbaw: { t: 'Wikipedia: National Basketball Association', u: 'https://en.wikipedia.org/wiki/National_Basketball_Association' },
+  aba: { t: 'Wikipedia: American Basketball Association (1967–1976)', u: 'https://en.wikipedia.org/wiki/American_Basketball_Association_(1967%E2%80%931976)' },
+  dream: { t: 'Wikipedia: 1992 United States men’s Olympic basketball team', u: 'https://en.wikipedia.org/wiki/1992_United_States_men%27s_Olympic_basketball_team' },
+  fibaw: { t: 'Wikipedia: FIBA', u: 'https://en.wikipedia.org/wiki/FIBA' },
+  bbrleagues: { t: 'Basketball-Reference: NBA & ABA seasons', u: 'https://www.basketball-reference.com/leagues/' },
+  three3: { t: 'Wikipedia: 3x3 basketball', u: 'https://en.wikipedia.org/wiki/3x3_(basketball)' },
+} satisfies Record<string, { t: string; u: string }>;

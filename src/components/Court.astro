@@ -1,0 +1,26 @@
+---
+import { SPEC, geometry } from '../lib/court';
+const { interactive = false } = Astro.props;
+const g = geometry(SPEC.nba);
+---
+<svg class:list={['court', { draw: true }]} id={interactive ? 'court' : undefined} viewBox="0 0 500 470"
+  role={interactive ? 'group' : undefined} aria-label={interactive ? 'Half-court diagram. Hover or focus a zone for its dimensions.' : undefined} aria-hidden={interactive ? undefined : 'true'}>
+  <g class="ln" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path pathLength="1" d="M5 5H495V470H5Z"/>
+    <path pathLength="1" data-g="paint" d={g.paint}/>
+    <path pathLength="1" data-g="ft" d={g.ft}/>
+    <path pathLength="1" class="dash" data-g="ftLow" d={g.ftLow}/>
+    <path pathLength="1" data-g="three" d={g.three}/>
+    <path pathLength="1" data-g="ra" d={g.ra}/>
+    <path pathLength="1" d="M220 430H280"/>
+    <circle pathLength="1" class="rim" cx="250" cy="417.5" r="7.5"/>
+  </g>
+  {interactive && (
+    <g class="zones" fill="transparent">
+      <path class="z" tabindex="0" data-k="three" data-g="three" data-z="1" d={g.three + 'Z'} aria-label="Three-point line"/>
+      <path class="z" tabindex="0" data-k="paint" data-g="paint" data-z="1" d={g.paint + 'Z'} aria-label="The paint"/>
+      <path class="z" tabindex="0" data-k="ft" data-g="ftZone" d={g.ftZone} aria-label="Free-throw circle"/>
+      <path class="z" tabindex="0" data-k="ra" data-g="ra" data-z="1" d={g.ra + 'Z'} aria-label="Restricted area"/>
+    </g>
+  )}
+</svg>

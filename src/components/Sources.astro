@@ -1,0 +1,4 @@
+---
+const { list = [] } = Astro.props;
+---
+<p class="src mono">Sources: {list.map((s, i) => <>{i > 0 && ' · '}<a href={s.u} rel="noopener">{s.t}</a></>)}</p>

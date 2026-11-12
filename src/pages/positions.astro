@@ -1,0 +1,24 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHead from '../components/PageHead.astro';
+import PagePhotos from '../components/PagePhotos.astro';
+import Sources from '../components/Sources.astro';
+import { positions } from '../data/positions';
+---
+<Base title="Positions and roles" desc="The five basketball positions and the role names used in the modern game.">
+  <PageHead kicker="03 · Positions and roles" title="Five spots, many jobs." lede="The numbers 1 to 5 still describe who stands where. The role names under them describe what the player actually does." />
+  <PagePhotos slot="positions" />
+  <section class="wrap">
+    <ul class="entries">
+      {positions.map((p) => (
+        <li class="entry reveal">
+          <span class="mono badge">{p.n} · {p.short}</span>
+          <h3>{p.name}</h3>
+          <p>{p.text}</p>
+          <ul class="roles" aria-label="Modern role names">{p.roles.map((r) => <li>{r}</li>)}</ul>
+          <Sources list={p.src} />
+        </li>
+      ))}
+    </ul>
+  </section>
+</Base>
